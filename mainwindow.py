@@ -19,7 +19,7 @@ class MainWindow(QMainWindow):
         self.ui.btnClasificar.clicked.connect(self.click_clasificar)
 
         # Creamos neurona, entrada y learning rate
-        self.neuron = Perceptron(2, 0.1)
+        self.neuron = Perceptron()
 
 
     @pyqtSlot()

@@ -6,10 +6,18 @@ from PyQt5 import QtGui
 
 
 class Perceptron:
-    contEpoch = 0
+    # defininmos limite de de epocas para evitar 
+    # bucles infinitos en caso de que los puntos 
+    # insertados no sean linealmente separables 
+    EPOCH = 100
+    LEARN_RATE = 0.1 # learning rate
+    N_INPUT = 2 # dimension de los patrones de entrenamiento
+    
+
+    contEpoch = 0 # contador de epocas
 
     # Constructor toma numero de inputs y learning rate
-    def __init__(self, n_input, learning_rate):
+    def __init__(self, n_input=N_INPUT, learning_rate=LEARN_RATE):
 
         # # inicializamos los pesos "w" con un vector de
         # # dimension "n_input" con rango [-1,1] random
@@ -49,24 +57,29 @@ class Perceptron:
         # retornamos vector con las salidas binarias
         return y_est
 
-    # Realiza aprendizaje en epocas
+    # Realiza aprendizaje en epocas, actualiza 
+    # puntos y division en grafica
+    def fit(self, X, Y, ui, epoch=EPOCH):
 
-    def fit(self, X, Y, ui, epoch=20):
         # p es el numero de conjuntos de entrada (patron)
         p = X.shape[1]
-        estimaciones = []
-        self.contEpoch = 0
+        # lista para comparar estimaciones con resultados esperados
+        estimaciones = []   
+        self.contEpoch = 0  
 
         # iteramos por cada epoca
         for _ in range(epoch):
+            # resetea estimaciones y aumenta contador
             estimaciones = []
             self.contEpoch += 1
-            # iteramos por cada patron
+
+            # iteramos por cada patron de entrenamiento
             for i in range(p):
+
                 # calculamos salida dado el patron actual
                 # reshape para asegurar que tenemos vector columna
                 y_est = self.predict(X[:, i].reshape(-1, 1))
-                estimaciones.append(y_est)
+                estimaciones.append(y_est) #guardamos estimacion
 
                 # actualizacion de peso y bias basado en el error
                 self.w = self.w + self.eta * (Y[i] - y_est) * X[:, i]
@@ -99,7 +112,7 @@ class Perceptron:
 
         print("Epocas: ", self.contEpoch)
 
-    # todas las estimaciones son iguales a las salidas esperadas?
+    # ¿todas las estimaciones son iguales a las salidas esperadas?
     def aprendizajeTerminado(self, Y, estimaciones):
         print("Y: ", Y)
         print("estimaciones: ", estimaciones)
@@ -109,8 +122,7 @@ class Perceptron:
                 return False
         return True
 
-    # calcular punto
-
+    # calcular punto para pendiente
     def punto(self, w1, w2, teta, x):
         if w2 == 0:
             print("No se puede dividir entre cero, cambia el valor de W2")
@@ -121,20 +133,18 @@ class Perceptron:
         y = (m*x) + c
         return y
 
+    # calcular pendiente de recta que separa 1s y 0s
     def calcularPendiente(self, columna):
         # linea para dividir
-        limLinea = [-10, 10]
-        # print(self.w)
-        # print(w[2])
+        limLinea = [-5, 5]
         p1 = self.punto(self.w[0, columna],
                         self.w[1, columna], -self.b, limLinea[0]),
         p2 = self.punto(self.w[0, columna],
                         self.w[1, columna], -self.b, limLinea[0]),
-        # p1 = self.punto(w1, w2, -self.b, limLinea[0]),
-        # p2 = self.punto(w1, w2, -self.b, limLinea[1])
 
         return p1, p2
 
+    # save fig and update UI
     def guardarActualizar(self, ui):
         plt.savefig("prueba.png")
         ui.label.setPixmap(QtGui.QPixmap("prueba.png"))
