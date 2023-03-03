@@ -56,7 +56,20 @@ class Graficafor:
         
     # plotteamos punto 
     def setPunto(self, x, y, _color, size=300):
-        self.ax.scatter(x, y, color=_color, s=size)
+        if _color== 1:
+            self.ax.scatter(x, y, color="green", s=size)
+        else:
+            self.ax.scatter(x, y, color="blue", s=size)
+    
+    # plotmatriz
+    def plotMatrix(self,X,Y):
+
+        # X transpuesto
+        for x, y in zip(np.transpose(X), Y):
+            if y == 1:
+                self.setPunto(x[0],x[1],1)
+            else:
+                self.setPunto(x[0],x[1],0)
 
     # plotteamos linea 
     def setDivision(self, pts, _color="r"):

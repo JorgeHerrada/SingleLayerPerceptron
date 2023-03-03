@@ -25,27 +25,31 @@ class MainWindow(QMainWindow):
     @pyqtSlot()
     def click_agregar(self):
         try:
+            # Primer punto? limpiamos plot
+            if len(self.entradas) == 0:
+                self.neuron.clear()
+
             # hay texto en las cajas?
             if self.ui.txtX1.text() != "" and self.ui.txtX2.text() != "":
                 # guardamos guardamos entradas (x1,x2) y salidas (y)
-                self.entradas.append([int(self.ui.txtX1.text()),int(self.ui.txtX2.text())])
+                self.entradas.append([float(self.ui.txtX1.text()),float(self.ui.txtX2.text())])
                 print("entradas: ",self.entradas)
                 if self.ui.checkBox.checkState():
                     self.salidas.append(1)
                     
                     # PLOTTEAR
-                    self.neuron.graficador.setPunto(self.entradas[-1][0],self.entradas[-1][1],"green")
+                    self.neuron.graficador.setPunto(self.entradas[-1][0],self.entradas[-1][1],1)
                 else:
                     self.salidas.append(0)
 
                     # PLOTTEAR
-                    self.neuron.graficador.setPunto(self.entradas[-1][0],self.entradas[-1][1],"blue")
-                print("Salidas: ", self.salidas)
+                    self.neuron.graficador.setPunto(self.entradas[-1][0],self.entradas[-1][1],0)
+                # print("Salidas: ", self.salidas)
             else:
                 print("Entrada invalida")
             
             # actualizar UI
-            print("apunto de guardarActualizar")
+            # print("apunto de guardarActualizar")
             self.neuron.guardarActualizar(self.ui)
 
             # limpiar 
@@ -66,20 +70,21 @@ class MainWindow(QMainWindow):
         for i in range(len(self.entradas[0])):
             for j in range(len(self.salidas)):
                 X[i,j] = self.entradas[j][i]
-        # print("X: ", X)
+        print("X: ", X)
 
         # Matriz de salidas deseadas (1 por cada par de entradas)
         Y = np.array(self.salidas)
-        # print("Y: ", Y)
+        print("Y: ", Y)
 
         # neurona aprende e imprime resultados
-        print(self.neuron.predict(X))
+        print("Pre entrenamiento: ",self.neuron.predict(X))
         self.neuron.fit(X, Y, self.ui)
-        print(self.neuron.predict(X))
+        print("Post entrenamiento: ",self.neuron.predict(X))
 
         # limpiamos
         self.entradas = []
         self.salidas = []
+        
 
         
  
