@@ -10,7 +10,7 @@ class Graficafor:
     fig, ax = plt.subplots(figsize=(10, 10))    
 
     # rango de linea divisoria
-    rangoLinea = [-10, 10]
+    rangoLinea = [-5, 5]
 
     # Set identical scales for both axes
     ax.set(xlim=(xmin-1, xmax+1), ylim=(ymin-1, ymax+1), aspect='equal')
@@ -72,7 +72,7 @@ class Graficafor:
                 self.setPunto(x[0],x[1],0)
 
     # plotteamos linea 
-    def setDivision(self, pts, _color="r"):
+    def drawDivision(self, pts, _color="r"):
         # Plot de la linea divisoria
         plt.plot([self.rangoLinea[0], self.rangoLinea[1]], [pts[0], pts[1]], color=_color)
 

@@ -17,7 +17,7 @@ class Perceptron:
         # # bias random con rango [-1,1]
         # self.b = -1 + (1 - (-1)) * np.random.rand()
         # self.eta = learning_rate
-        self.clear(n_input,learning_rate)
+        self.clear(n_input, learning_rate)
         self.graficador = Graficafor()
 
     # funcion de activacion
@@ -73,31 +73,34 @@ class Perceptron:
                 self.b = self.b + self.eta * (Y[i] - y_est)
 
                 # actualizacion en UI
-                ui.txtW1.setText(str(round(self.w[0],6)))
-                ui.txtW2.setText(str(round(self.w[1],6)))
-                ui.txtTheta.setText(str(-round(self.b[0],6)))
+                ui.txtW1.setText(str(round(self.w[0], 6)))
+                ui.txtW2.setText(str(round(self.w[1], 6)))
+                ui.txtTheta.setText(str(-round(self.b[0], 6)))
 
+            # limpiar
+            plt.cla()
 
             # plottear puntos a color
-            self.graficador.plotMatrix(X,estimaciones)
+            self.graficador.plotMatrix(X, estimaciones)
 
             # plottear linea
-            
-            
+            self.graficador.drawDivision([self.punto(self.w[0], self.w[1], -self.b, -5),
+                                          self.punto(self.w[0], self.w[1], -self.b, 5)],)
+
             # actualizar
             self.guardarActualizar(ui)
 
             # se logró el objetivo?
-            if self.aprendizajeTerminado(Y,estimaciones):
+            if self.aprendizajeTerminado(Y, estimaciones):
                 break
-            
+
             # retraso para visualizar
             QtTest.QTest.qWait(100)
-        
-        print("Epocas: ",self.contEpoch)
+
+        print("Epocas: ", self.contEpoch)
 
     # todas las estimaciones son iguales a las salidas esperadas?
-    def aprendizajeTerminado(self,Y,estimaciones):
+    def aprendizajeTerminado(self, Y, estimaciones):
         print("Y: ", Y)
         print("estimaciones: ", estimaciones)
 
@@ -106,29 +109,31 @@ class Perceptron:
                 return False
         return True
 
-        
     # calcular punto
+
     def punto(self, w1, w2, teta, x):
         if w2 == 0:
             print("No se puede dividir entre cero, cambia el valor de W2")
             return
-        
+
         m = -1*(w1/w2)
         c = teta/w2
         y = (m*x) + c
         return y
 
-    def calcularPendiente(self,columna):
+    def calcularPendiente(self, columna):
         # linea para dividir
         limLinea = [-10, 10]
         # print(self.w)
         # print(w[2])
-        p1 = self.punto(self.w[0,columna], self.w[1,columna], -self.b, limLinea[0]), 
-        p2 = self.punto(self.w[0,columna], self.w[1,columna], -self.b, limLinea[0]), 
-        # p1 = self.punto(w1, w2, -self.b, limLinea[0]), 
+        p1 = self.punto(self.w[0, columna],
+                        self.w[1, columna], -self.b, limLinea[0]),
+        p2 = self.punto(self.w[0, columna],
+                        self.w[1, columna], -self.b, limLinea[0]),
+        # p1 = self.punto(w1, w2, -self.b, limLinea[0]),
         # p2 = self.punto(w1, w2, -self.b, limLinea[1])
 
-        return p1,p2
+        return p1, p2
 
     def guardarActualizar(self, ui):
         plt.savefig("prueba.png")
@@ -138,10 +143,11 @@ class Perceptron:
     def clear(self, n_input=2, learning_rate=0.1):
         # plt.clf()
         plt.cla()
-        
+
         # inicializamos los pesos "w" con un vector de
         # dimension "n_input" con rango [-1,1] random
         self.w = -1 + (1 - (-1)) * np.random.rand(n_input)
         # bias random con rango [-1,1]
         self.b = -1 + (1 - (-1)) * np.random.rand()
         self.eta = learning_rate
+
