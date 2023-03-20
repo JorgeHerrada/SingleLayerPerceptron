@@ -47,12 +47,26 @@ class Perceptron:
         # como vector de p dimensiones con 0s
         y_est = np.zeros(p)
 
-        # iteramos por cada solucion a generar
-        for i in range(p):
-            # calculamos salidas
-            y_est[i] = np.dot(self.w, X[:, i]) + self.b
-            # asignamos valor binario según la funcion de activacion
+        # # iteramos por cada solucion a generar
+        # for i in range(p):
+        #     # calculamos salidas
+        #     y_est[i] = np.dot(self.w, X[:, i]) + self.b
+        #     # asignamos valor binario según la funcion de activacion
+        #     y_est[i] = self.f_activacion(y_est[i])
+
+        # Producto punto del array de pesos y matriz de entradas (w * X) + bias
+        y_est = np.dot(self.w,X) + self.b
+        # print("PRUEBA: ",y_est)
+
+        # y_est += self.b
+        # print("PRUEBA: ",y_est)
+
+        # mandamos cada salida estimada a funcion de activación
+        for i in range(len(y_est)):
             y_est[i] = self.f_activacion(y_est[i])
+        
+        # exit()
+
 
         # retornamos vector con las salidas binarias
         return y_est
