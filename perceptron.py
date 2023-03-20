@@ -28,12 +28,16 @@ class Perceptron:
         self.clear(n_input, learning_rate)
         self.graficador = Graficafor()
 
-    # funcion de activacion
-    def f_activacion(self, num):
-        if num >= 0:
-            return 1
-        else:
-            return 0
+    # funcion de activacion perceptrón
+    def f_activacion(self, nums):
+        vector = []
+        for num in nums:
+            if num >= 0:
+                vector.append(1)
+            else:
+                vector.append(0)
+        
+        return vector
 
     # Entrega un vector de salidas, dada una matriz de
     # entradas para la neurona
@@ -41,32 +45,17 @@ class Perceptron:
     def predict(self, X):
 
         # p es el numero de columnas en la matriz X
-        p = X.shape[1]
+        # p = X.shape[1]
 
         # y_est guardará la salidas, se inicializa
         # como vector de p dimensiones con 0s
-        y_est = np.zeros(p)
-
-        # # iteramos por cada solucion a generar
-        # for i in range(p):
-        #     # calculamos salidas
-        #     y_est[i] = np.dot(self.w, X[:, i]) + self.b
-        #     # asignamos valor binario según la funcion de activacion
-        #     y_est[i] = self.f_activacion(y_est[i])
+        # y_est = np.zeros(p)
 
         # Producto punto del array de pesos y matriz de entradas (w * X) + bias
         y_est = np.dot(self.w,X) + self.b
-        # print("PRUEBA: ",y_est)
 
-        # y_est += self.b
-        # print("PRUEBA: ",y_est)
-
-        # mandamos cada salida estimada a funcion de activación
-        for i in range(len(y_est)):
-            y_est[i] = self.f_activacion(y_est[i])
-        
-        # exit()
-
+        # mandamos salida estimada a funcion de activación
+        y_est = self.f_activacion(y_est)
 
         # retornamos vector con las salidas binarias
         return y_est
@@ -93,7 +82,9 @@ class Perceptron:
                 # calculamos salida dado el patron actual
                 # reshape para asegurar que tenemos vector columna
                 y_est = self.predict(X[:, i].reshape(-1, 1))
-                estimaciones.append(y_est) #guardamos estimacion
+                # print("y_est: ",y_est)
+                estimaciones.append(y_est[0]) #guardamos estimacion
+                # y_est en este caso es una lista de 1 elemento, guardamos el indice 0
 
                 # actualizacion de peso y bias basado en el error
                 self.w = self.w + self.eta * (Y[i] - y_est) * X[:, i]
