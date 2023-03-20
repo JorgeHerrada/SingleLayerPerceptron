@@ -34,12 +34,16 @@ class MainWindow(QMainWindow):
                 # guardamos guardamos entradas (x1,x2) y salidas (y)
                 self.entradas.append([float(self.ui.txtX1.text()),float(self.ui.txtX2.text())])
                 print("entradas: ",self.entradas)
+
+                # Ploteamos punto agregado en coordenada y color correspondiente
                 if self.ui.checkBox.checkState():
+                    # agregamos 1 a la lista de salidas deseadas 
                     self.salidas.append(1)
                     
                     # PLOTTEAR
                     self.neuron.graficador.setPunto(self.entradas[-1][0],self.entradas[-1][1],1)
                 else:
+                    # agregamos 0 a la lista de salidas deseadas 
                     self.salidas.append(0)
 
                     # PLOTTEAR
@@ -62,9 +66,10 @@ class MainWindow(QMainWindow):
     @pyqtSlot()
     def click_clasificar(self):
         # # Creamos neurona, entrada y learning rate
-        # neuron = Perceptron(2, 0.1)
+        # neuron = Perceptron(2, 0.1) 
 
-        # Creamos matriz de entradas
+        # Creamos matriz de entradas de 2 filas y n columnas
+        # n es el numero puntos agregados
         X = np.zeros(shape=(2,len(self.salidas)))
         # print("X: ", X)
         for i in range(len(self.entradas[0])):
